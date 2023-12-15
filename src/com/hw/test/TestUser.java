@@ -42,7 +42,6 @@ public class TestUser {
         boolean flag = false;
         Connection conn = null;
         PreparedStatement pstm = null;
-
         try {
             // 1.获取数据库连接（mysql8.0的驱动jar包可省略加载驱动步骤）
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kp", "root", "123456");
