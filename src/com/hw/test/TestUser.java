@@ -29,14 +29,63 @@ public class TestUser {
 //        findAllUser().forEach(System.out::println);
 
 
-        System.out.print("请输入你要修改的用户的id:");
+//        System.out.print("请输入你要修改的用户的id:");
+//        int id = scanner.nextInt();
+//        System.out.print("请输入修改后的数据(name,age,status,gender):");
+//        String newinfo = scanner.next();
+//        String[] split = newinfo.split(",");
+//        System.out.println(updateUser(new User(split[0], Integer.parseInt(split[1]), split[2], split[3]), id));
+
+
+        System.out.print("请输入你要查询的用户的id:");
         int id = scanner.nextInt();
-        System.out.print("请输入修改后的数据(name,age,status,gender):");
-        String newinfo = scanner.next();
-        String[] split = newinfo.split(",");
-        System.out.println(updateUser(new User(split[0], Integer.parseInt(split[1]), split[2], split[3]), id));
+        System.out.println(findUserById(id));
+
 
     }
+    //查询单条用户信息
+    public static User findUserById(int id){
+        User user = null;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kp", "root", "123456");
+            String sql = "select * from tb_user where id = ?";
+            pstm = conn.prepareCall(sql);
+            pstm.setInt(1,id);
+            rs = pstm.executeQuery();
+            if (rs.next()){
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setAge(rs.getInt("age"));
+                user.setStatus(rs.getString("status"));
+                user.setGender(rs.getString("gender"));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (rs != null){
+                    rs.close();
+                }
+                if (pstm != null){
+                    pstm.close();
+                }
+                if (conn != null){
+                    conn.close();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return user;
+
+    }
+
     //修改用户
     public static boolean updateUser(User user,int id){
         boolean flag = false;
@@ -46,7 +95,7 @@ public class TestUser {
             // 1.获取数据库连接（mysql8.0的驱动jar包可省略加载驱动步骤）
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kp", "root", "123456");
             // 2.创建可执行sql对象     ？代表占位符
-            String sql = "update tb_user set name = ? , age = ? , Status = ? , gender = ? where id = ?";
+            String sql = "update tb_user set name = ? , age = ? , status = ? , gender = ? where id = ?";
             pstm = conn.prepareStatement(sql);
             pstm.setString(1,user.getName());
             pstm.setInt(2,user.getAge());
