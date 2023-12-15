@@ -46,7 +46,7 @@ public class TestUser {
             // 1.获取数据库连接（mysql8.0的驱动jar包可省略加载驱动步骤）
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kp", "root", "123456");
             // 2.创建可执行sql对象     ？代表占位符
-            String sql = "update tb_user set name = ? , age = ? , Status = ? , gender = ? where id = ?";
+            String sql = "update tb_user set name = ? , age = ? , status = ? , gender = ? where id = ?";
             pstm = conn.prepareStatement(sql);
             pstm.setString(1,user.getName());
             pstm.setInt(2,user.getAge());
